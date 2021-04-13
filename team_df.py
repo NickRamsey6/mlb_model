@@ -55,8 +55,16 @@ sea_df.insert(84, 'team_runs_allowed', team_runs_allowed, True)
 
 sea_df['cumulative_runs_allowed'] = sea_df['team_runs_allowed'].cumsum()
 
+# Calculate scoring ratio and predicted win %
+sea_df['scoring_ratio'] = sea_df['cumulative_runs_scored'] / \
+    sea_df['cumulative_runs_allowed']
+
+sea_df['pred_win_%'] = (sea_df['scoring_ratio'] ** 2) / \
+    ((sea_df['scoring_ratio'] ** 2) + 1)
 
 # Widdle down dataframe to needed columns
 sea_df = sea_df[['date', 'winning_abbr', 'away_runs',
-                 'home_runs', 'away_team', 'home_team', 'team', 'team_runs_scored', 'cumulative_runs_scored', 'team_runs_allowed', 'cumulative_runs_allowed']]
+                 'home_runs', 'away_team', 'home_team', 'team', 'team_runs_scored', 'cumulative_runs_scored', 'team_runs_allowed', 'cumulative_runs_allowed', 'scoring_ratio', 'pred_win_%']]
+
+# print(len(sea_df))
 print(sea_df)
