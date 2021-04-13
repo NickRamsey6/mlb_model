@@ -32,17 +32,17 @@ sea_df.insert(82, 'away_team', away_team, True)
 sea_df['team'] = 'SEA'
 
 # Add Cumulative Runs Scored Column
-team_runs = []
+team_runs_scored = []
 for ind in sea_df.index:
     if sea_df['away_team'][ind] == 'SEA':
-        team_runs.append(sea_df['away_runs'][ind])
+        team_runs_scored.append(sea_df['away_runs'][ind])
     else:
-        team_runs.append(sea_df['home_runs'][ind])
+        team_runs_scored.append(sea_df['home_runs'][ind])
 
-sea_df.insert(83, 'team_runs', team_runs, True)
+sea_df.insert(83, 'team_runs_scored', team_runs_scored, True)
 
-sea_df['cumulative_runs'] = sea_df['team_runs'].cumsum()
+sea_df['cumulative_runs_scored'] = sea_df['team_runs_scored'].cumsum()
 
 sea_df = sea_df[['date', 'winning_abbr', 'away_runs',
-                 'home_runs', 'away_team', 'home_team', 'team', 'team_runs', 'cumulative_runs']]
+                 'home_runs', 'away_team', 'home_team', 'team', 'team_runs_scored', 'cumulative_runs_scored']]
 print(sea_df)
