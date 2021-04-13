@@ -43,6 +43,20 @@ sea_df.insert(83, 'team_runs_scored', team_runs_scored, True)
 
 sea_df['cumulative_runs_scored'] = sea_df['team_runs_scored'].cumsum()
 
+# Add cumulative runs allowed column
+team_runs_allowed = []
+for ind in sea_df.index:
+    if sea_df['away_team'][ind] == 'SEA':
+        team_runs_allowed.append(sea_df['home_runs'][ind])
+    else:
+        team_runs_allowed.append(sea_df['away_runs'][ind])
+
+sea_df.insert(84, 'team_runs_allowed', team_runs_allowed, True)
+
+sea_df['cumulative_runs_allowed'] = sea_df['team_runs_allowed'].cumsum()
+
+
+# Widdle down dataframe to needed columns
 sea_df = sea_df[['date', 'winning_abbr', 'away_runs',
-                 'home_runs', 'away_team', 'home_team', 'team', 'team_runs_scored', 'cumulative_runs_scored']]
+                 'home_runs', 'away_team', 'home_team', 'team', 'team_runs_scored', 'cumulative_runs_scored', 'team_runs_allowed', 'cumulative_runs_allowed']]
 print(sea_df)
