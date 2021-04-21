@@ -4,6 +4,8 @@ from sportsreference.mlb.schedule import Schedule
 import pandas as pd
 import datetime
 
+opening_day = datetime.datetime(2019, 3, 28)
+x = opening_day.strftime('%m/%d/%Y')
 
 # Create dataframe of all unique games for a season
 games = []
@@ -25,18 +27,21 @@ sched_df = sched_df.drop_duplicates(subset='Game')
 
 sched_df['Date'] = pd.to_datetime(sched_df.Date)
 sched_df['Date'] = sched_df['Date'].dt.strftime('%m/%d/%Y')
+# Filter out opening games
+sched_df = sched_df[sched_df['Date'] > x]
 
-# # WIP filter league_df by date
-last5 = sched_df.tail()
 
-league_df = pd.read_csv('\\Users\\nrams\\onedrive\\desktop\\league.csv')
+# # # WIP filter league_df by date
+
+league_df = pd.read_csv('league.csv')
 
 team1pred = []
 team2pred = []
-for ind in last5.index:
-    team1 = last5['Team1'][ind]
-    team2 = last5['Team2'][ind]
-    gameday = last5['Date'][ind]
+winners = []
+for ind in sched_df.index:
+    team1 = sched_df['Team1'][ind]
+    team2 = sched_df['Team2'][ind]
+    gameday = sched_df['Date'][ind]
     # Team 1 Work
     team1df = league_df[league_df.team == team1]
     team1df = team1df[team1df['date'] < gameday]
@@ -56,7 +61,13 @@ for ind in last5.index:
 
     team2pred.append(team2df.iloc[0]['pred_win_%'])
 
+    if team1df.iloc[0]['pred_win_%'] > team2df.iloc[0]['pred_win_%']:
+        winners.append(team1df.iloc[0]['team'])
+    else:
+        winners.append(team2df.iloc[0]['team'])
 
-last5.insert(4, 'team1 pred', team1pred, True)
-last5.insert(5, 'team2 pred', team2pred, True)
-print(last5)
+
+sched_df.insert(4, 'team1 pred', team1pred, True)
+sched_df.insert(5, 'team2 pred', team2pred, True)
+sched_df.insert(6, 'Winner', winners, True)
+print(sched_df)
