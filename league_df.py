@@ -4,7 +4,7 @@ from sportsreference.mlb.schedule import Schedule
 import pandas as pd
 
 league_dfs_list = []
-for team in Teams('2019'):
+for team in Teams('2017'):
     schedule = team.schedule.dataframe_extended
     schedule['team'] = team.abbreviation
 
